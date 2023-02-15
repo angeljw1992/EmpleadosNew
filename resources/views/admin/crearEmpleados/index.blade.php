@@ -3,15 +3,15 @@
 @can('crear_empleado_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route('admin.crear-empleados.create') }}">
+            <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.crear-empleados.create') }}">
                 {{ trans('global.add') }} {{ trans('cruds.crearEmpleado.title_singular') }}
             </a>
-            <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
+            <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#csvImportModal">
                 {{ trans('global.app_csvImport') }}
             </button>
 			
-                <a  class="btn btn-success" href="{{ route('export-table-to-xml') }}">Exportar Employees</a>
-				<a  class="btn btn-success" href="{{ route('export-to-txt') }}">Exportar Security</a>
+                <a  class="btn btn-outline-success btn-sm" href="{{ route('export-table-to-xml') }}">Exportar Employees</a>
+				<a  class="btn btn-outline-warning btn-sm" href="{{ route('export-to-txt') }}">Exportar Security</a>
 
             
             @include('csvImport.modal', ['model' => 'CrearEmpleado', 'route' => 'admin.crear-empleados.parseCsvImport'])
