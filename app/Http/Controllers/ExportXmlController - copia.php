@@ -9,35 +9,34 @@ class ExportXmlController extends Controller
 {
     public function exportTableToXml()
     {
-
+		//Aquí se conecta a la DB y busca los valores
 		$employees = DB::table('crear_empleados')->select('name', 'codigo_empleado', 'rol')->get();
-        $xml = new SimpleXMLElement('<crear-empleados/>');
-		
+		//Aqui se crea la cabecera del XML
+        $xml = new SimpleXMLElement('<ns0:empleados xmlns:ns0="http://www.arcosdorados.com/integrationservices/cdm"/>');
 
+		
+			//Aqui se le da formato al XML
 			foreach ($employees as $employee) {
-			  $xmlElement = $xml->addChild("ns0:TextA");
+			  $xmlElement = $xml->addChild("ns0:empleado", null, null);
 			  $xmlElement->addChild("ns0:employeeID", $employee->codigo_empleado);
-			  $xmlElement->addChild("ns0:name", $employee->name);
-			  $xmlElement->addChild("ns0:rol", $employee->rol);
+			  $xmlElement->addChild("ns0:employeeName", $employee->name);
+			  $xmlElement->addChild("ns0:securityLevel", $employee->rol);
 			}
 		
 
-        header('Content-type: text/xml');
-        header('Content-Disposition: attachment; filename="employees.xml"');
+		   // Obtener la salida XML
+		$output = $xml->asXML();
 
-        echo $xml->asXML();
-        exit;
-		
-		
-		
-		        // Agrega la sentencia de texto al footer del archivo XML
-        $xml->addChild('footer', 'Este archivo fue generado por el controlador de exportación de Laravel');
+		// Eliminar la primera línea de la salida
+		$output = preg_replace('/<\?xml.*\?>/', '', $output);
 
-        // Agrega el contenido del archivo a la respuesta
-        $response->setContent($xml->asXML());
+		// Establecer las cabeceras de la respuesta HTTP
+		header('Content-type: text/xml');
+		header('Content-Disposition: attachment; filename="employees.xml"');
 
-        // Devuelve la respuesta HTTP
-        return $response;
+		// Imprimir la salida XML
+		echo $output;
+		exit;
 		
 		
     }
